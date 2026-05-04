@@ -1,0 +1,77 @@
+# AKRE — Rencana Implementasi Modul Simulasi Penilaian (Dual-Perspective)
+
+Modul ini akan mengintegrasikan **Pedoman Penilaian IAPS 4.0** ke dalam sistem AKRE, menyediakan fitur perbandingan antara hasil kalkulasi otomatis sistem dan penilaian manual asesor.
+
+---
+
+## 1. Konsep Perbandingan Bobot & Skor
+
+Sistem akan mengelola dua jalur data penilaian:
+
+| Fitur | **Sistem (Auto-Calculated)** | **Asesor (Manual/Adjusted)** |
+|---|---|---|
+| **Sumber Data** | Hasil query ke 28 tabel transaksi (real-time). | Input manual dari pengguna (simulasi asesor). |
+| **Metode** | Kaku sesuai rumus (misal: Rasio Dosen < 1:30 = 4). | Fleksibel (bisa menyesuaikan temuan lapangan). |
+| **Tujuan** | Memberikan gambaran performa data mentah. | Memberikan gambaran target peringkat yang diinginkan. |
+| **Output** | "Prediksi Teknis" berdasarkan data yang ada. | "Optimisme Akreditasi" atau hasil simulasi lapangan. |
+
+---
+
+## 2. Perubahan Skema Database
+
+Dibutuhkan 4 tabel baru untuk mendukung modul ini:
+
+### A. `setup_elemen_penilaian`
+Menyimpan daftar butir pertanyaan/elemen sesuai PDF (misal: C.1.4, C.4.4.a, dst).
+### B. `setup_bobot_resmi`
+Menyimpan matriks bobot per jenjang (D3, S1, S2, S3) sesuai Lampiran PDF halaman 170-182.
+### C. `simulasi_hasil_sistem`
+Menyimpan hasil kalkulasi otomatis sistem (skor 0-4) per butir penilaian.
+### D. `simulasi_hasil_asesor`
+Menyimpan input skor manual dari user (skor 0-4) serta catatan/justifikasi asesor.
+
+---
+
+## 3. Alur Kerja (Workflow)
+
+1.  **Engine Kalkulasi (Layer 2)**: 
+    *   Membuat `Simulasi_model.php`. 
+    *   Setiap elemen (misal: Skor SDM) akan memiliki fungsi khusus yang menghitung data dari `master_dosen` dan `trx_kegiatan_tridharma` menggunakan rumus BAN-PT.
+2.  **Interface Input Asesor (Layer 3)**:
+    *   Disediakan form "Kertas Kerja Asesor" yang menyerupai tabel di PDF.
+    *   User bisa mengisi skor 0-4 secara manual untuk melihat efeknya terhadap Nilai Akhir (NA).
+3.  **Dashboard Perbandingan**:
+    *   Menampilkan **Side-by-Side Comparison**.
+    *   Visualisasi: Radar Chart yang menunjukkan gap antara data sistem (kenyataan) vs data asesor (harapan/target).
+
+---
+
+## 4. Validasi Syarat Perlu (Prerequisites)
+
+Sistem akan secara otomatis mengecek "Syarat Perlu Terakreditasi" dan "Syarat Perlu Unggul" dari kedua sisi:
+*   Jika skor sistem pada elemen "Kecukupan Dosen" < 2.0, sistem akan memberi label **"TIDAK TERAKREDITASI"** meskipun nilai total tinggi.
+*   Hal yang sama berlaku untuk simulasi asesor.
+
+---
+
+## 5. Rencana Tahapan Kerja
+
+### Tahap 1: Setup Master Data & Bobot
+*   Migrasi tabel setup elemen dan bobot resmi (D3 sampai S3).
+*   Seeder bobot berdasarkan PDF halaman 170-182.
+
+### Tahap 2: Pembangunan Scoring Engine (Sistem)
+*   Implementasi rumus untuk Kriteria 3 (Mahasiswa), 4 (SDM), dan 9 (Luaran) yang paling banyak menggunakan data kuantitatif.
+*   Mapping data tabel transaksi ke elemen penilaian.
+
+### Tahap 3: Pembangunan Interface (Asesor & Comparison)
+*   Halaman Kertas Kerja Asesor.
+*   Halaman Dashboard Simulasi dengan grafik perbandingan.
+
+---
+
+## 6. Contoh Visualisasi yang Dihasilkan
+*   **Radar Chart**: 9 Sumbu (Kriteria 1 s/d 9).
+*   **Warna Biru**: Skor Sistem.
+*   **Warna Emas**: Skor Asesor.
+*   **Area Gap**: Menunjukkan aspek mana yang datanya masih lemah di sistem namun ditargetkan tinggi oleh prodi.

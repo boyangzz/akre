@@ -1,0 +1,24 @@
+# Dependencies
+/vendor/
+node_modules/
+
+# Environment / Config sensitif
+.env
+.env.*
+application/config/database.php
+
+# CI cache & logs
+application/logs/*.log
+application/cache/*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Upload sementara
+application/uploads/tmp/
