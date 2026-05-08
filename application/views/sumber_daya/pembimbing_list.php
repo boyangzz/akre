@@ -14,7 +14,7 @@
         <form method="POST" action="<?= base_url('sumber_daya/pembimbing_save') ?>">
             <input type="hidden" name="id" id="field-id">
             <div class="row g-3">
-                <div class="col-md-12">
+                <div class="col-12 mb-3">
                     <label class="form-label fw-bold">Nama Dosen Tetap</label>
                     <select class="form-select select2" name="dosen_id" id="field-dosen" required>
                         <option value="">-- Pilih Dosen --</option>
@@ -129,6 +129,9 @@
                             <button class="btn btn-sm btn-outline-primary" onclick="editRow('<?= $r->id ?>','<?= $r->dosen_id ?>','<?= $r->ps_sendiri_ts2 ?>','<?= $r->ps_sendiri_ts1 ?>','<?= $r->ps_sendiri_ts ?>','<?= $r->ps_lain_ts2 ?>','<?= $r->ps_lain_ts1 ?>','<?= $r->ps_lain_ts ?>')">
                                 <i class="bi bi-pencil"></i>
                             </button>
+                            <a href="<?= base_url('sumber_daya/pembimbing_delete/'.$r->id) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus data bimbingan ini?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </td>
                     </tr>
                     <?php endforeach; ?>

@@ -45,6 +45,9 @@
                             <button class="btn btn-sm btn-outline-primary" onclick='editData(<?= json_encode($r) ?>)'>
                                 <i class="bi bi-pencil"></i>
                             </button>
+                            <a href="<?= base_url('sumber_daya/produk_jasa_delete/'.$r->id) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus data ini?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </td>
                     </tr>
                     <?php endforeach; endif; ?>

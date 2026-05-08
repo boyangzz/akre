@@ -9,7 +9,7 @@
 </div>
 
 <div class="row g-3">
-    <div class="col-md-4">
+    <div class="col-12 mb-3">
         <div class="card">
             <div class="card-header">Input Data</div>
             <div class="card-body">
@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -68,7 +68,8 @@
                                     </td>
                                     <td class="fw-bold"><?= $r->jumlah_sitasi ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-link p-0" onclick="editData('<?= $r->id ?>', '<?= $r->dosen_id ?>', '<?= addslashes($r->judul_artikel) ?>', '<?= addslashes($r->jurnal_vol_tahun_hal) ?>', '<?= $r->jumlah_sitasi ?>')"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-link p-0 me-2" onclick="editData('<?= $r->id ?>', '<?= $r->dosen_id ?>', '<?= addslashes($r->judul_artikel) ?>', '<?= addslashes($r->jurnal_vol_tahun_hal) ?>', '<?= $r->jumlah_sitasi ?>')"><i class="bi bi-pencil"></i></button>
+                                        <a href="<?= base_url('sumber_daya/sitasi_delete/'.$r->id) ?>" class="btn btn-sm btn-link p-0 text-danger" onclick="return confirm('Hapus data ini?')"><i class="bi bi-trash"></i></a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

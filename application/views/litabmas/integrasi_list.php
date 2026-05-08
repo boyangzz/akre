@@ -42,9 +42,12 @@
                         <td class="text-start"><?= $r->bentuk_integrasi ?></td>
                         <td><?= $r->tahun ?></td>
                         <td>
-                            <button class="btn btn-sm btn-link p-0" onclick='editData(<?= json_encode($r) ?>)'>
+                            <button class="btn btn-sm btn-link p-0 me-1" onclick='editData(<?= json_encode($r) ?>)'>
                                 <i class="bi bi-pencil-square"></i>
                             </button>
+                            <a href="<?= base_url('litabmas/integrasi_delete/'.$r->id) ?>" class="btn btn-sm btn-link p-0 text-danger" onclick="return confirm('Hapus data ini?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </td>
                     </tr>
                     <?php endforeach; endif; ?>

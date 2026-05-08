@@ -215,6 +215,17 @@ class Luaran extends MY_Controller
         redirect($redirect);
     }
 
+    public function prestasi_delete($id)
+    {
+        $record = $this->db->get_where('trx_prestasi_mhs', ['id' => $id])->row();
+        $jenis = ($record && $record->jenis_prestasi == 'akademik') ? '8b1' : '8b2';
+        $this->guard_jenjang($jenis);
+        
+        $this->db->where('id', $id)->delete('trx_prestasi_mhs');
+        $this->session->set_flashdata('success', 'Data prestasi berhasil dihapus.');
+        redirect('luaran/' . $jenis);
+    }
+
     public function kesesuaian_bidang()
     {
         $this->guard_jenjang('8d2');
@@ -294,6 +305,17 @@ class Luaran extends MY_Controller
             $this->db->insert('trx_tempat_kerja', $data);
         }
         $this->session->set_flashdata('success', 'Data berhasil disimpan.');
+        redirect('luaran/' . $kode);
+    }
+
+    public function tempat_kerja_delete($id)
+    {
+        $record = $this->db->get_where('trx_tempat_kerja', ['id' => $id])->row();
+        $kode = ($record && $record->kode_asal == '8d2') ? '8d2' : '8e1';
+        $this->guard_jenjang($kode);
+
+        $this->db->where('id', $id)->delete('trx_tempat_kerja');
+        $this->session->set_flashdata('success', 'Data berhasil dihapus.');
         redirect('luaran/' . $kode);
     }
 
@@ -408,6 +430,25 @@ class Luaran extends MY_Controller
         }
         $this->session->set_flashdata('success', 'Data luaran mahasiswa berhasil disimpan.');
         redirect('luaran/' . ($kode ?: '8f1'));
+    }
+
+    public function luaran_mhs_delete($id)
+    {
+        $record = $this->db->get_where('trx_luaran_mhs', ['id' => $id])->row();
+        $kode = $record ? $record->jenis : '8f1'; // fallback
+        // Map jenis to code if needed, but the guard uses codes. 
+        // For f-series, usually it's just a general check or specifically 8f2, 8f3, 8f4.
+        
+        $this->db->where('id', $id)->delete('trx_luaran_mhs');
+        $this->session->set_flashdata('success', 'Data luaran mahasiswa berhasil dihapus.');
+        
+        // Re-mapping the redirect based on the type
+        $redirect = '8f1';
+        if ($kode == 'Sitasi') $redirect = '8f2';
+        if ($kode == 'Produk') $redirect = '8f3';
+        if ($kode == 'HKI')    $redirect = '8f4';
+        
+        redirect('luaran/' . $redirect);
     }
 
     public function __call($name, $arguments)

@@ -40,4 +40,12 @@ class Sarpras extends MY_Controller
         $this->session->set_flashdata('success', 'Seluruh data penggunaan dana berhasil disimpan.');
         redirect('sarpras');
     }
+
+    public function delete($id)
+    {
+        $this->guard_jenjang('4');
+        $this->db->where('id', $id)->delete('trx_penggunaan_dana');
+        $this->session->set_flashdata('success', 'Data penggunaan dana berhasil dihapus.');
+        redirect('sarpras');
+    }
 }

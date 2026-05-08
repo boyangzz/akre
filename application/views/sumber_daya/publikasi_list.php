@@ -31,7 +31,7 @@ $types = [
 ?>
 
 <div class="row g-3">
-    <div class="col-md-4">
+    <div class="col-12">
         <div class="card shadow-sm border-0">
             <div class="card-header bg-primary text-white">Input Data Publikasi</div>
             <div class="card-body">
@@ -70,7 +70,7 @@ $types = [
         </div>
     </div>
     
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card shadow-sm border-0">
             <div class="card-body p-0">
                 <div class="table-responsive">

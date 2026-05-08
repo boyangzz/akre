@@ -11,8 +11,7 @@
 </div>
 
 <div class="row g-3">
-    <!-- Form Input -->
-    <div class="col-md-4">
+    <div class="col-12 mb-3">
         <div class="card">
             <div class="card-header">Input Data</div>
             <div class="card-body">
@@ -58,7 +57,7 @@
     </div>
 
     <!-- Tabel Data -->
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card">
             <div class="card-body p-0">
                 <div class="table-responsive">

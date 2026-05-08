@@ -107,7 +107,7 @@ foreach($records as $r) {
 <?php endif; ?>
 
 <div class="row g-3">
-    <div class="col-md-4">
+    <div class="col-12 mb-3">
         <div class="card">
             <div class="card-header">Input Data</div>
             <div class="card-body">
@@ -149,7 +149,7 @@ foreach($records as $r) {
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -174,7 +174,8 @@ foreach($records as $r) {
                                     <td><?= $r->tahun ?></td>
                                     <td><?= $r->keterangan ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-link p-0" onclick="editRow('<?= $r->id ?>', '<?= $r->mahasiswa_id ?>', '<?= $r->jenis ?>', '<?= addslashes($r->judul) ?>', '<?= $r->tahun ?>', '<?= addslashes($r->keterangan) ?>')"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-link p-0 me-2" onclick="editRow('<?= $r->id ?>', '<?= $r->mahasiswa_id ?>', '<?= $r->jenis ?>', '<?= addslashes($r->judul) ?>', '<?= $r->tahun ?>', '<?= addslashes($r->keterangan) ?>')"><i class="bi bi-pencil"></i></button>
+                                        <a href="<?= base_url('luaran/luaran_mhs_delete/'.$r->id) ?>" class="btn btn-sm btn-link p-0 text-danger" onclick="return confirm('Hapus data luaran ini?')"><i class="bi bi-trash"></i></a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

@@ -9,7 +9,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-12 mb-4">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">Input Penelitian Mhs (6a)</div>
             <div class="card-body">
@@ -50,7 +50,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card shadow-sm">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -79,9 +79,12 @@
                                     <td><?= $r->judul_kegiatan ?></td>
                                     <td><?= $r->tahun ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary" onclick="edit('<?= $r->id ?>','<?= $r->dosen_id ?>','<?= $r->tema_roadmap ?>','<?= $r->mahasiswa_id ?>','<?= htmlspecialchars($r->judul_kegiatan) ?>','<?= $r->tahun ?>')">
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="edit('<?= $r->id ?>','<?= $r->dosen_id ?>','<?= $r->tema_roadmap ?>','<?= $r->mahasiswa_id ?>','<?= htmlspecialchars($r->judul_kegiatan) ?>','<?= $r->tahun ?>')">
                                             <i class="bi bi-pencil"></i>
                                         </button>
+                                        <a href="<?= base_url('litabmas/penelitian_delete/'.$r->id) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus data ini?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -125,6 +125,14 @@ class Sumber_daya extends MY_Controller
         redirect('sumber_daya/penelitian');
     }
 
+    public function penelitian_delete($id)
+    {
+        $this->guard_jenjang('3b2');
+        $this->Sumber_daya_model->delete('trx_penelitian_dtps', $id);
+        $this->session->set_flashdata('success', 'Data penelitian berhasil dihapus.');
+        redirect('sumber_daya/penelitian');
+    }
+
     public function pkm()
     {
         $this->guard_jenjang('3b3');
@@ -146,6 +154,14 @@ class Sumber_daya extends MY_Controller
         redirect('sumber_daya/pkm');
     }
 
+    public function pkm_delete($id)
+    {
+        $this->guard_jenjang('3b3');
+        $this->Sumber_daya_model->delete('trx_pkm_dtps', $id);
+        $this->session->set_flashdata('success', 'Data PkM berhasil dihapus.');
+        redirect('sumber_daya/pkm');
+    }
+
     public function publikasi()
     {
         $this->guard_jenjang('3b4');
@@ -164,6 +180,14 @@ class Sumber_daya extends MY_Controller
         $data['prodi_id'] = 1;
         $this->Sumber_daya_model->save('trx_publikasi_dtps', $id, $data);
         $this->session->set_flashdata('success', 'Data publikasi berhasil disimpan.');
+        redirect('sumber_daya/publikasi');
+    }
+
+    public function publikasi_delete($id)
+    {
+        $this->guard_jenjang('3b4');
+        $this->Sumber_daya_model->delete('trx_publikasi_dtps', $id);
+        $this->session->set_flashdata('success', 'Data publikasi berhasil dihapus.');
         redirect('sumber_daya/publikasi');
     }
 
@@ -192,6 +216,14 @@ class Sumber_daya extends MY_Controller
         redirect('sumber_daya/hki');
     }
 
+    public function hki_delete($id)
+    {
+        $this->guard_jenjang('3b5');
+        $this->Sumber_daya_model->delete('trx_hki_buku_dtps', $id);
+        $this->session->set_flashdata('success', 'Data HKI/Buku berhasil dihapus.');
+        redirect('sumber_daya/hki');
+    }
+
     public function sitasi()
     {
         $this->guard_jenjang('3b6');
@@ -217,6 +249,14 @@ class Sumber_daya extends MY_Controller
         redirect('sumber_daya/sitasi');
     }
 
+    public function sitasi_delete($id)
+    {
+        $this->guard_jenjang('3b6'); // Should be 3b6? sitasi is usually 3b6
+        $this->Sumber_daya_model->delete('trx_sitasi_dtps', $id);
+        $this->session->set_flashdata('success', 'Data sitasi berhasil dihapus.');
+        redirect('sumber_daya/sitasi');
+    }
+
     public function produk_jasa()
     {
         $this->guard_jenjang('3b6');
@@ -239,6 +279,14 @@ class Sumber_daya extends MY_Controller
         $data['prodi_id'] = 1;
         $this->Sumber_daya_model->save('trx_produk_jasa_dtps', $id, $data);
         $this->session->set_flashdata('success', 'Data produk/jasa berhasil disimpan.');
+        redirect('sumber_daya/produk_jasa');
+    }
+
+    public function produk_jasa_delete($id)
+    {
+        $this->guard_jenjang('3b6');
+        $this->Sumber_daya_model->delete('trx_produk_jasa_dtps', $id);
+        $this->session->set_flashdata('success', 'Data produk/jasa berhasil dihapus.');
         redirect('sumber_daya/produk_jasa');
     }
 
@@ -275,6 +323,14 @@ class Sumber_daya extends MY_Controller
         $data['prodi_id'] = 1;
         $this->Sumber_daya_model->save('trx_dosen_bimbingan', $id, $data);
         $this->session->set_flashdata('success', 'Data bimbingan multi-tahun berhasil disimpan.');
+        redirect('sumber_daya/pembimbing_ta');
+    }
+
+    public function pembimbing_delete($id)
+    {
+        $this->guard_jenjang('3a2');
+        $this->Sumber_daya_model->delete('trx_dosen_bimbingan', $id);
+        $this->session->set_flashdata('success', 'Data bimbingan berhasil dihapus.');
         redirect('sumber_daya/pembimbing_ta');
     }
 
@@ -335,7 +391,15 @@ class Sumber_daya extends MY_Controller
         $data['prodi_id'] = 1;
         $this->Sumber_daya_model->save('trx_luaran_mhs', $id, $data);
         $this->session->set_flashdata('success', 'Data luaran berhasil disimpan.');
-        redirect('sumber_daya/3b7');
+        redirect('sumber_daya/luaran_lain');
+    }
+
+    public function luaran_lain_delete($id)
+    {
+        $this->guard_jenjang('3b7');
+        $this->Sumber_daya_model->delete('trx_luaran_mhs', $id);
+        $this->session->set_flashdata('success', 'Data luaran berhasil dihapus.');
+        redirect('sumber_daya/luaran_lain');
     }
 
     public function __call($name, $arguments)

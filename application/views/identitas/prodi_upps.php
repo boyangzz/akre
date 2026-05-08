@@ -10,7 +10,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-12 mb-4">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">Tambah/Edit Program Studi</div>
             <div class="card-body">
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card shadow-sm border-0">
             <div class="card-body p-0">
                 <div class="table-responsive">

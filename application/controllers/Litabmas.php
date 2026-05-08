@@ -75,6 +75,14 @@ class Litabmas extends MY_Controller
         redirect('litabmas/penelitian');
     }
 
+    public function penelitian_delete($id)
+    {
+        $this->guard_jenjang('6a');
+        $this->db->where('id', $id)->delete('trx_penelitian_dtps');
+        $this->session->set_flashdata('success', 'Data penelitian berhasil dihapus.');
+        redirect('litabmas/penelitian');
+    }
+
     public function save_pkm()
     {
         $data = $this->input->post(null, true);
@@ -88,6 +96,14 @@ class Litabmas extends MY_Controller
             $this->db->insert('trx_pkm_dtps', $data);
         }
         $this->session->set_flashdata('success', 'Data PkM berhasil disimpan.');
+        redirect('litabmas/pkms');
+    }
+
+    public function pkm_delete($id)
+    {
+        $this->guard_jenjang('7');
+        $this->db->where('id', $id)->delete('trx_pkm_dtps');
+        $this->session->set_flashdata('success', 'Data PkM berhasil dihapus.');
         redirect('litabmas/pkms');
     }
 
@@ -119,6 +135,14 @@ class Litabmas extends MY_Controller
             $this->db->insert('trx_integrasi_pembelajaran', $data);
         }
         $this->session->set_flashdata('success', 'Data integrasi berhasil disimpan.');
+        redirect('litabmas/integrasi');
+    }
+
+    public function integrasi_delete($id)
+    {
+        $this->guard_jenjang('5b');
+        $this->db->where('id', $id)->delete('trx_integrasi_pembelajaran');
+        $this->session->set_flashdata('success', 'Data integrasi berhasil dihapus.');
         redirect('litabmas/integrasi');
     }
 

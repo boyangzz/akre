@@ -9,7 +9,7 @@
 </div>
 
 <div class="row g-3">
-    <div class="col-md-4">
+    <div class="col-12 mb-3">
         <div class="card">
             <div class="card-header">Input Data</div>
             <div class="card-body">
@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card">
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -76,7 +76,8 @@
                                     <td><?= $r->prestasi ?></td>
                                     <td><?= $r->tahun ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-link p-0" onclick="editRow('<?= $r->id ?>', '<?= $r->mahasiswa_id ?>', '<?= addslashes($r->nama_kegiatan) ?>', '<?= $r->tingkat ?>', '<?= addslashes($r->prestasi) ?>', '<?= $r->tahun ?>')"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-link p-0 me-2" onclick="editRow('<?= $r->id ?>', '<?= $r->mahasiswa_id ?>', '<?= addslashes($r->nama_kegiatan) ?>', '<?= $r->tingkat ?>', '<?= addslashes($r->prestasi) ?>', '<?= $r->tahun ?>')"><i class="bi bi-pencil"></i></button>
+                                        <a href="<?= base_url('luaran/prestasi_delete/'.$r->id) ?>" class="btn btn-sm btn-link p-0 text-danger" onclick="return confirm('Hapus data prestasi ini?')"><i class="bi bi-trash"></i></a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
