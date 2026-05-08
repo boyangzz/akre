@@ -14,4 +14,9 @@ class Dashboard_model extends CI_Model
             'publikasi'  => $this->db->count_all('trx_publikasi_dtps'),
         ];
     }
+
+    public function get_identitas()
+    {
+        return $this->db->get('identitas_pengusul')->row();
+    }
 }

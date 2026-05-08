@@ -48,6 +48,7 @@ class MY_Controller extends CI_Controller
             'current_user'    => $this->current_user,
             'current_jenjang' => $this->current_jenjang,
             'menu_items'      => $menu_items,
+            'identitas'       => $identitas, // Injeksi identitas global
         ]);
     }
 
@@ -83,5 +84,7 @@ class Public_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $identitas = $this->db->get('identitas_pengusul')->row();
+        $this->load->vars(['identitas' => $identitas]);
     }
 }

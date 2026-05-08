@@ -16,7 +16,7 @@
                 <div class="login-brand">
                     <h3><i class="bi bi-mortarboard-fill"></i> AKRE</h3>
                     <small>Sistem Akreditasi Program Studi — BAN-PT</small>
-                    <div class="text-muted mt-1" style="font-size:0.7rem;">Universitas XYZ</div>
+                    <div class="text-muted mt-1" style="font-size:0.7rem;"><?= isset($identitas->nama_pt) ? $identitas->nama_pt : 'Universitas' ?></div>
                 </div>
 
                 <?php if ($this->session->flashdata('error')): ?>

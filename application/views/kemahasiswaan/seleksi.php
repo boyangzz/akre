@@ -38,9 +38,17 @@
                         <label class="form-label">Maba Reguler</label>
                         <input type="number" class="form-control" name="maba_reguler" id="field-mr">
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label">Maba Transfer</label>
                         <input type="number" class="form-control" name="maba_transfer" id="field-mt">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Mhs Aktif Reguler</label>
+                        <input type="number" class="form-control" name="mhs_aktif_reguler" id="field-mar">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mhs Aktif Transfer</label>
+                        <input type="number" class="form-control" name="mhs_aktif_transfer" id="field-mat">
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Simpan Data</button>
                     <button type="reset" class="btn btn-link btn-sm w-100 mt-1" onclick="$('#field-id').val('')">Reset Form</button>
@@ -61,11 +69,14 @@
                                 <th rowspan="2">Daya Tampung</th>
                                 <th colspan="2">Calon Mahasiswa</th>
                                 <th colspan="2">Mahasiswa Baru</th>
+                                <th colspan="2">Mahasiswa Aktif</th>
                                 <th rowspan="2">Aksi</th>
                             </tr>
                             <tr>
                                 <th>Pendaftar</th>
                                 <th>Lulus Seleksi</th>
+                                <th>Reguler</th>
+                                <th>Transfer</th>
                                 <th>Reguler</th>
                                 <th>Transfer</th>
                             </tr>
@@ -82,8 +93,10 @@
                                     <td><?= $r->lulus_seleksi ?></td>
                                     <td><?= $r->maba_reguler ?></td>
                                     <td><?= $r->maba_transfer ?></td>
+                                    <td><?= $r->mhs_aktif_reguler ?></td>
+                                    <td><?= $r->mhs_aktif_transfer ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-link p-0 me-1" onclick="editRow('<?= $r->id ?>', '<?= $r->tahun_akademik ?>', '<?= $r->daya_tampung ?>', '<?= $r->pendaftar ?>', '<?= $r->lulus_seleksi ?>', '<?= $r->maba_reguler ?>', '<?= $r->maba_transfer ?>')"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-link p-0 me-1" onclick="editRow('<?= $r->id ?>', '<?= $r->tahun_akademik ?>', '<?= $r->daya_tampung ?>', '<?= $r->pendaftar ?>', '<?= $r->lulus_seleksi ?>', '<?= $r->maba_reguler ?>', '<?= $r->maba_transfer ?>', '<?= $r->mhs_aktif_reguler ?>', '<?= $r->mhs_aktif_transfer ?>')"><i class="bi bi-pencil"></i></button>
                                         <a href="javascript:void(0)" onclick="if(confirm('Hapus data ini?')) window.location='<?= base_url('kemahasiswaan/seleksi_delete/' . $r->id) ?>'"><i class="bi bi-trash text-danger"></i></a>
                                     </td>
                                 </tr>
@@ -98,7 +111,7 @@
 </div>
 
 <script>
-function editRow(id, ta, dt, pdft, ls, mr, mt) {
+function editRow(id, ta, dt, pdft, ls, mr, mt, mar, mat) {
     $('#field-id').val(id);
     $('#field-ta').val(ta);
     $('#field-dt').val(dt);
@@ -106,5 +119,7 @@ function editRow(id, ta, dt, pdft, ls, mr, mt) {
     $('#field-ls').val(ls);
     $('#field-mr').val(mr);
     $('#field-mt').val(mt);
+    $('#field-mar').val(mar);
+    $('#field-mat').val(mat);
 }
 </script>

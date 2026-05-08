@@ -1,3 +1,52 @@
+<?php
+// Mapping Categories to BAN-PT Excel Standards
+if (strpos($page_title, '8.f.1') !== false) {
+    $kode_asal = '8f1';
+    $jenis_options = [
+        'Jurnal penelitian tidak terakreditasi',
+        'Jurnal penelitian nasional terakreditasi',
+        'Jurnal penelitian internasional',
+        'Jurnal penelitian internasional bereputasi',
+        'Seminar wilayah/lokal/perguruan tinggi',
+        'Seminar nasional',
+        'Seminar internasional',
+        'Pagelaran/pameran/presentasi (Wilayah)',
+        'Pagelaran/pameran/presentasi (Nasional)',
+        'Pagelaran/pameran/presentasi (Internasional)'
+    ];
+} elseif (strpos($page_title, '8.f.4') !== false) {
+    $kode_asal = '8f4';
+    $jenis_options = [
+        'Paten (8f4-1)',
+        'Paten Sederhana (8f4-1)',
+        'Hak Cipta (8f4-2)',
+        'Teknologi Tepat Guna (8f4-3)',
+        'Produk / Karya Seni / Rekayasa Sosial (8f4-3)',
+        'Buku Ber-ISBN / Book Chapter (8f4-4)',
+        'Desain Industri / Rahasia Dagang'
+    ];
+} elseif (strpos($page_title, '8.f.3') !== false) {
+    $kode_asal = '8f3';
+    $jenis_options = ['Produk yang mendapatkan HKI','Produk yang diadopsi oleh Industri','Produk yang diadopsi oleh Masyarakat'];
+} else {
+    $kode_asal = '8f2';
+    $jenis_options = ['Karya Ilmiah Mahasiswa yang Disitasi'];
+}
+
+// Logic for Summary Table (Excel-like)
+$ts_year = date('Y');
+$summary = [];
+foreach($jenis_options as $j) {
+    $summary[$j] = ['ts' => 0, 'ts1' => 0, 'ts2' => 0];
+}
+foreach($records as $r) {
+    if (isset($summary[$r->jenis])) {
+        if ($r->tahun == $ts_year) $summary[$r->jenis]['ts']++;
+        elseif ($r->tahun == $ts_year - 1) $summary[$r->jenis]['ts1']++;
+        elseif ($r->tahun == $ts_year - 2) $summary[$r->jenis]['ts2']++;
+    }
+}
+?>
 <div class="page-header">
     <h4><i class="bi bi-mortarboard me-2"></i><?= $page_title ?></h4>
     <nav aria-label="breadcrumb">
@@ -8,19 +57,60 @@
     </nav>
 </div>
 
+<?php if (in_array($kode_asal, ['8f1', '8f3', '8f4'])): ?>
+<div class="card mb-4 border-info">
+    <div class="card-header bg-info text-white py-2">
+        <i class="bi bi-table me-2"></i>Ringkasan Tabel <?= strtoupper(str_replace('f', '.f.', $kode_asal)) ?> (Automated Summary)
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-sm table-bordered mb-0 text-center align-middle small">
+            <thead class="table-light">
+                <tr>
+                    <th rowspan="2" class="align-middle">No</th>
+                    <th rowspan="2" class="align-middle text-start">Jenis Publikasi</th>
+                    <th colspan="3">Jumlah Judul</th>
+                    <th rowspan="2" class="align-middle bg-light">Jumlah</th>
+                </tr>
+                <tr>
+                    <th>TS-2</th>
+                    <th>TS-1</th>
+                    <th>TS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $no=1; $gt=0; foreach($jenis_options as $j): 
+                    $row_total = $summary[$j]['ts'] + $summary[$j]['ts1'] + $summary[$j]['ts2'];
+                    $gt += $row_total;
+                ?>
+                <tr>
+                    <td><?= $no++ ?></td>
+                    <td class="text-start"><?= $j ?></td>
+                    <td><?= $summary[$j]['ts2'] ?></td>
+                    <td><?= $summary[$j]['ts1'] ?></td>
+                    <td><?= $summary[$j]['ts'] ?></td>
+                    <td class="bg-light fw-bold"><?= $row_total ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot class="table-dark">
+                <tr>
+                    <th colspan="2" class="text-center">Jumlah</th>
+                    <th><?= array_sum(array_column($summary, 'ts2')) ?></th>
+                    <th><?= array_sum(array_column($summary, 'ts1')) ?></th>
+                    <th><?= array_sum(array_column($summary, 'ts')) ?></th>
+                    <th><?= $gt ?></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<?php endif; ?>
+
 <div class="row g-3">
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">Input Data</div>
             <div class="card-body">
-                <?php
-                // Determine kode_asal from page_title
-                if (strpos($page_title, '8.f.1') !== false) $kode_asal = '8f1';
-                elseif (strpos($page_title, '8.f.2') !== false) $kode_asal = '8f2';
-                elseif (strpos($page_title, '8.f.3') !== false) $kode_asal = '8f3';
-                else $kode_asal = '8f4';
-                $jenis_options = ['Publikasi','Sitasi','Produk','HKI','Buku','Rekayasa Sosial','Karya Seni'];
-                ?>
                 <form method="POST" action="<?= base_url('luaran/luaran_mhs_save') ?>">
                     <input type="hidden" name="id" id="field-id">
                     <input type="hidden" name="kode_asal" value="<?= $kode_asal ?>">

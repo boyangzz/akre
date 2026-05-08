@@ -41,4 +41,35 @@ class Identitas extends MY_Controller
         $this->session->set_flashdata('success', 'Identitas pengusul berhasil disimpan.');
         redirect('identitas');
     }
+
+    public function prodi_upps()
+    {
+        $data = [
+            'page_title' => 'Daftar Program Studi di UPPS',
+            'records'    => $this->db->get('identitas_prodi_upps')->result(),
+        ];
+        $this->render('identitas/prodi_upps', $data);
+    }
+
+    public function prodi_upps_save()
+    {
+        $data = $this->input->post(null, true);
+        $id = $this->input->post('id');
+
+        if ($id) {
+            $this->db->where('id', $id)->update('identitas_prodi_upps', $data);
+        } else {
+            $this->db->insert('identitas_prodi_upps', $data);
+        }
+
+        $this->session->set_flashdata('success', 'Data program studi berhasil disimpan.');
+        redirect('identitas/prodi_upps');
+    }
+
+    public function prodi_upps_delete($id)
+    {
+        $this->db->where('id', $id)->delete('identitas_prodi_upps');
+        $this->session->set_flashdata('success', 'Data program studi berhasil dihapus.');
+        redirect('identitas/prodi_upps');
+    }
 }

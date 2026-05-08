@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h4><i class="bi bi-emoji-smile me-2"></i>Kepuasan Pengguna Lulusan (8.e.2)</h4>
+    <h4><i class="bi bi-star-fill me-2 text-warning"></i>Kepuasan Pengguna Lulusan (8.e.2)</h4>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?= base_url('dashboard') ?>">Dashboard</a></li>
@@ -8,104 +8,126 @@
     </nav>
 </div>
 
-<div class="row g-3">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">Input Penilaian</div>
-            <div class="card-body">
-                <form method="POST" action="<?= base_url('luaran/kepuasan_save') ?>">
-                    <input type="hidden" name="id" id="field-id">
-                    <div class="mb-3">
-                        <label class="form-label">Jenis Kemampuan</label>
-                        <select class="form-select" name="jenis_kemampuan" id="field-jenis" required>
-                            <option value="Etika">Etika</option>
-                            <option value="Keahlian bidang ilmu">Keahlian bidang ilmu</option>
-                            <option value="Kemampuan bahasa asing">Kemampuan bahasa asing</option>
-                            <option value="Penggunaan teknologi informasi">Penggunaan teknologi informasi</option>
-                            <option value="Kemampuan berkomunikasi">Kemampuan berkomunikasi</option>
-                            <option value="Kerjasama tim">Kerjasama tim</option>
-                            <option value="Pengembangan diri">Pengembangan diri</option>
-                        </select>
-                    </div>
-                    <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <label class="form-label">Sangat Baik (%)</label>
-                            <input type="number" step="0.01" class="form-control" name="persen_sangat_baik" id="field-sb" required>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label">Baik (%)</label>
-                            <input type="number" step="0.01" class="form-control" name="persen_baik" id="field-b" required>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label">Cukup (%)</label>
-                            <input type="number" step="0.01" class="form-control" name="persen_cukup" id="field-c" required>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label">Kurang (%)</label>
-                            <input type="number" step="0.01" class="form-control" name="persen_kurang" id="field-k" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Rencana Tindak Lanjut</label>
-                        <textarea class="form-control" name="rencana_tindak_lanjut" id="field-rtl" rows="2"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Simpan Data</button>
-                    <button type="reset" class="btn btn-link btn-sm w-100 mt-2" onclick="$('#field-id').val('')">Reset Form</button>
-                </form>
+<form action="<?= base_url('luaran/kepuasan_save_bulk') ?>" method="POST">
+    <!-- Tabel 1: Tabel Referensi Angka -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white fw-bold">
+            <i class="bi bi-table me-2"></i>Tabel Referensi (Jumlah Lulusan & Tanggapan)
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm mb-0 text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th width="30%">Tahun Lulus</th>
+                            <th width="35%">Jumlah Lulusan</th>
+                            <th width="35%">Jumlah Tanggapan Kepuasan Pengguna yang Terlacak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $tahuns = ['TS-4', 'TS-3', 'TS-2'];
+                        foreach ($tahuns as $idx => $thn): 
+                            $existing = null;
+                            foreach ($ref_records as $r) {
+                                if ($r->tahun_lulus == $thn) { $existing = $r; break; }
+                            }
+                        ?>
+                        <tr>
+                            <td class="fw-bold bg-light">
+                                <?= $thn ?>
+                                <input type="hidden" name="ref[<?= $idx ?>][tahun_lulus]" value="<?= $thn ?>">
+                                <input type="hidden" name="ref[<?= $idx ?>][id]" value="<?= $existing ? $existing->id : '' ?>">
+                            </td>
+                            <td><input type="number" name="ref[<?= $idx ?>][jml_lulusan]" class="form-control form-control-sm text-end" value="<?= $existing ? $existing->jml_lulusan : 0 ?>"></td>
+                            <td><input type="number" name="ref[<?= $idx ?>][jml_tanggapan]" class="form-control form-control-sm text-end" value="<?= $existing ? $existing->jml_tanggapan : 0 ?>"></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-sm text-center align-middle mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th rowspan="2">Jenis Kemampuan</th>
-                                <th colspan="4">Tingkat Kepuasan Pengguna (%)</th>
-                                <th rowspan="2">Aksi</th>
-                            </tr>
-                            <tr>
-                                <th>SB</th>
-                                <th>B</th>
-                                <th>C</th>
-                                <th>K</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (empty($records)): ?>
-                                <tr><td colspan="6" class="py-4 text-muted">Belum ada data kepuasan.</td></tr>
-                            <?php else: ?>
-                                <?php foreach ($records as $r): ?>
-                                <tr>
-                                    <td class="text-start px-2"><?= $r->jenis_kemampuan ?></td>
-                                    <td><?= $r->persen_sangat_baik ?></td>
-                                    <td><?= $r->persen_baik ?></td>
-                                    <td><?= $r->persen_cukup ?></td>
-                                    <td><?= $r->persen_kurang ?></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-link p-0" onclick="editData('<?= $r->id ?>', '<?= $r->jenis_kemampuan ?>', '<?= $r->persen_sangat_baik ?>', '<?= $r->persen_baik ?>', '<?= $r->persen_cukup ?>', '<?= $r->persen_kurang ?>', '<?= addslashes($r->rencana_tindak_lanjut) ?>')"><i class="bi bi-pencil"></i></button>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
+
+    <!-- Tabel 2: Tingkat Kepuasan (7 Kriteria) -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white fw-bold">
+            <i class="bi bi-graph-up-arrow me-2"></i>Tingkat Kepuasan Pengguna Berdasarkan Kriteria
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm mb-0 text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th rowspan="2" width="5%">No</th>
+                            <th rowspan="2" width="25%">Jenis Kemampuan</th>
+                            <th colspan="4">Tingkat Kepuasan Pengguna (%)</th>
+                            <th rowspan="2" width="20%">Rencana Tindak Lanjut</th>
+                        </tr>
+                        <tr class="table-secondary text-dark">
+                            <th width="10%">Sangat Baik</th>
+                            <th width="10%">Baik</th>
+                            <th width="10%">Cukup</th>
+                            <th width="10%">Kurang</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($records)): ?>
+                            <tr><td colspan="7" class="py-4 text-muted">Data kriteria belum ada di database.</td></tr>
+                        <?php else: foreach ($records as $idx => $r): ?>
+                        <tr>
+                            <td><?= $idx + 1 ?></td>
+                            <td class="text-start ps-3 fw-bold">
+                                <?= $r->jenis_kemampuan ?>
+                                <input type="hidden" name="score[<?= $idx ?>][id]" value="<?= $r->id ?>">
+                            </td>
+                            <td><input type="number" step="0.01" name="score[<?= $idx ?>][persen_sangat_baik]" class="form-control form-control-sm text-end" value="<?= $r->persen_sangat_baik ?>"></td>
+                            <td><input type="number" step="0.01" name="score[<?= $idx ?>][persen_baik]" class="form-control form-control-sm text-end" value="<?= $r->persen_baik ?>"></td>
+                            <td><input type="number" step="0.01" name="score[<?= $idx ?>][persen_cukup]" class="form-control form-control-sm text-end" value="<?= $r->persen_cukup ?>"></td>
+                            <td><input type="number" step="0.01" name="score[<?= $idx ?>][persen_kurang]" class="form-control form-control-sm text-end" value="<?= $r->persen_kurang ?>"></td>
+                            <td><textarea name="score[<?= $idx ?>][rencana_tindak_lanjut]" class="form-control form-control-sm" rows="2"><?= $r->rencana_tindak_lanjut ?></textarea></td>
+                        </tr>
+                        <?php endforeach; endif; ?>
+                    </tbody>
+                    <tfoot class="table-light fw-bold">
+                        <tr>
+                            <td colspan="2">Jumlah</td>
+                            <td id="total-score-sb">0</td>
+                            <td id="total-score-b">0</td>
+                            <td id="total-score-c">0</td>
+                            <td id="total-score-k">0</td>
+                            <td class="bg-secondary-subtle"></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
+        <div class="card-footer bg-light py-3 text-center">
+            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                <i class="bi bi-save2 me-2"></i>Simpan Seluruh Data Kepuasan Pengguna
+            </button>
+        </div>
     </div>
-</div>
+</form>
 
 <script>
-function editData(id, jenis, sb, b, c, k, rtl) {
-    $('#field-id').val(id);
-    $('#field-jenis').val(jenis);
-    $('#field-sb').val(sb);
-    $('#field-b').val(b);
-    $('#field-c').val(c);
-    $('#field-k').val(k);
-    $('#field-rtl').val(rtl);
-}
+document.addEventListener('DOMContentLoaded', function() {
+    function calculateScore() {
+        const table = document.querySelector('table:nth-of-type(2)');
+        const cols = ['persen_sangat_baik', 'persen_baik', 'persen_cukup', 'persen_kurang'];
+        const footIds = ['total-score-sb', 'total-score-b', 'total-score-c', 'total-score-k'];
+
+        cols.forEach((col, idx) => {
+            let sum = 0;
+            document.querySelectorAll(`input[name$="[${col}]"]`).forEach(i => sum += parseFloat(i.value) || 0);
+            document.getElementById(footIds[idx]).innerText = sum.toFixed(2);
+        });
+    }
+
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('input', calculateScore);
+    });
+
+    calculateScore();
+});
 </script>

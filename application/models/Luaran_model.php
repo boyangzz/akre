@@ -12,12 +12,17 @@ class Luaran_model extends CI_Model
         return $this->db->where('id', $id)->get($table)->row();
     }
 
-    public function save($table, $id, $data) {
-        if ($id) return $this->db->where('id', $id)->update($table, $data);
-        return $this->db->insert($table, $data);
+    public function save($table, $id, $data)
+    {
+        if ($id) {
+            return $this->db->where('id', $id)->update($table, $data);
+        } else {
+            return $this->db->insert($table, $data);
+        }
     }
 
-    public function delete($table, $id) {
+    public function delete($table, $id)
+    {
         return $this->db->where('id', $id)->delete($table);
     }
 }

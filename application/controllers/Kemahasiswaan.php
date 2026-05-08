@@ -31,6 +31,8 @@ class Kemahasiswaan extends MY_Controller
             'lulus_seleksi'  => $this->input->post('lulus_seleksi', true),
             'maba_reguler'   => $this->input->post('maba_reguler', true),
             'maba_transfer'  => $this->input->post('maba_transfer', true),
+            'mhs_aktif_reguler' => $this->input->post('mhs_aktif_reguler', true),
+            'mhs_aktif_transfer' => $this->input->post('mhs_aktif_transfer', true),
             'prodi_id'       => 1,
         ];
         $this->Kemahasiswaan_model->save_seleksi($id, $data);

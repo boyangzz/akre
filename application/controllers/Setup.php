@@ -48,4 +48,12 @@ class Setup extends MY_Controller
         $this->session->set_flashdata('success', 'Solusi Jangka Panjang: Setup Borang untuk jenjang D3 berhasil direstorasi dan divalidasi dengan Standar Matriks BAN-PT (Sesuai Gambar Acuan).');
         redirect('setup/borang');
     }
+
+    public function qc_audit()
+    {
+        $data = [
+            'page_title' => 'QC Audit Result',
+        ];
+        $this->render('setup/qc_audit', $data);
+    }
 }

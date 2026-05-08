@@ -120,6 +120,12 @@ class Simulasi_model extends CI_Model {
             $this->_calc_keketatan_seleksi_d3();
             $this->_calc_ipk_lulusan_d3();
             $this->_calc_masa_studi_d3();
+            
+            // NEW: Additional Automated Indicators (D3 Calibration)
+            $this->_calc_kerjasama_d3();
+            $this->_calc_sertifikat_dosen_d3();
+            $this->_calc_prestasi_mhs_d3();
+            $this->_calc_waktu_tunggu_d3();
         } else if ($jenjang == 'S1') {
             $this->_calc_kecukupan_dosen_s1();
             $this->_calc_kualifikasi_dosen_s1();
@@ -128,6 +134,16 @@ class Simulasi_model extends CI_Model {
             $this->_calc_ipk_lulusan_s1();
             $this->_calc_masa_studi_s1();
             $this->_calc_waktu_tunggu_s1();
+            
+            // NEW: Additional Automated Indicators (S1 Calibration)
+            $this->_calc_kerjasama_s1();
+            $this->_calc_rekognisi_dosen_s1();
+            $this->_calc_prestasi_mhs_s1();
+            
+            // NEW: Phase 2 S1 Automation
+            $this->_calc_bidang_kerja_s1();
+            $this->_calc_kepuasan_pengguna_s1();
+            $this->_calc_publikasi_mhs_s1();
         }
         
         // Elemen kualitatif (input asesor) tidak dikalkulasi otomatis oleh sistem
@@ -211,6 +227,66 @@ class Simulasi_model extends CI_Model {
         }
         
         $this->_save_skor_sistem('C.4.4.a', 'D3', $skor);
+    }
+
+    private function _calc_kerjasama_d3() {
+        // C.2.4.c: Kerjasama Vokasi (D3)
+        $a = $this->db->where('tingkat', 'internasional')->count_all_results('trx_kerjasama');
+        $b = $this->db->where('tingkat', 'nasional')->count_all_results('trx_kerjasama');
+        $c = $this->db->where('tingkat', 'lokal')->count_all_results('trx_kerjasama');
+        
+        $total_poin = (3 * $a) + (2 * $b) + $c;
+        $skor = 0;
+        // Threshold D3 sedikit berbeda (lebih fokus pada keberadaan industri)
+        if ($total_poin >= 8) $skor = 4.00;
+        else if ($total_poin > 0) $skor = ($total_poin / 8) * 4;
+        
+        $this->_save_skor_sistem('C.2.4.c', 'D3', $skor);
+    }
+
+    private function _calc_sertifikat_dosen_d3() {
+        // C.4.4.d: Sertifikat Kompetensi/Industri (Sangat krusial untuk D3)
+        $total_dosen = $this->db->where('status_ikatan', 'tetap')->count_all_results('master_dosen');
+        $bersertifikat = $this->db->where('status_ikatan', 'tetap')
+                                  ->where('sertifikat_kompetensi IS NOT NULL')
+                                  ->where('sertifikat_kompetensi !=', '')
+                                  ->count_all_results('master_dosen');
+        
+        $skor = 0;
+        if ($total_dosen > 0) {
+            $p_cert = ($bersertifikat / $total_dosen) * 100;
+            if ($p_cert >= 50) $skor = 4.00;
+            else $skor = ($p_cert / 50) * 4;
+        }
+        
+        $this->_save_skor_sistem('C.4.4.d', 'D3', $skor);
+    }
+
+    private function _calc_prestasi_mhs_d3() {
+        // C.9.4.b: Prestasi Mahasiswa D3
+        $int = $this->db->where('tingkat', 'internasional')->count_all_results('trx_prestasi_mhs');
+        $nas = $this->db->where('tingkat', 'nasional')->count_all_results('trx_prestasi_mhs');
+        $wil = $this->db->where('tingkat', 'wilayah')->count_all_results('trx_prestasi_mhs');
+        
+        $total_poin = (4 * $int) + (3 * $nas) + (2 * $wil);
+        $skor = 0;
+        if ($total_poin >= 15) $skor = 4.00;
+        else if ($total_poin > 0) $skor = ($total_poin / 15) * 4;
+        
+        $this->_save_skor_sistem('C.9.4.b', 'D3', $skor);
+    }
+
+    private function _calc_waktu_tunggu_d3() {
+        // C.9.4.d: Waktu Tunggu D3 (Target <= 3 Bulan)
+        $row = $this->db->order_by('tahun_lulus', 'DESC')->limit(1)->get('trx_waktu_tunggu')->row();
+        $skor = 0;
+        if ($row && $row->jml_terlacak > 0) {
+            $p_wt = ($row->wt_kurang_3bln / $row->jml_terlacak) * 100;
+            if ($p_wt >= 80) $skor = 4.00;
+            else if ($p_wt >= 40) $skor = ($p_wt / 20) - 1; // Formula linear sederhana
+            else $skor = 1.00;
+        }
+        $this->_save_skor_sistem('C.9.4.d', 'D3', $skor);
     }
 
     /**
@@ -318,6 +394,92 @@ class Simulasi_model extends CI_Model {
             else if ($avg_wt <= 18) $skor = (18 - $avg_wt) / 12 * 4;
         }
         $this->_save_skor_sistem('C.9.4.d', 'S1', $skor);
+    }
+
+    private function _calc_kerjasama_s1() {
+        // C.2.4.a: Kerjasama (Internasional, Nasional, Lokal)
+        $a = $this->db->where('tingkat', 'internasional')->count_all_results('trx_kerjasama');
+        $b = $this->db->where('tingkat', 'nasional')->count_all_results('trx_kerjasama');
+        $c = $this->db->where('tingkat', 'lokal')->count_all_results('trx_kerjasama');
+        
+        $total_poin = (3 * $a) + (2 * $b) + $c;
+        $skor = 0;
+        if ($total_poin >= 10) $skor = 4.00;
+        else if ($total_poin > 0) $skor = ($total_poin / 10) * 4;
+        
+        $this->_save_skor_sistem('C.2.4.a', 'S1', $skor);
+    }
+
+    private function _calc_rekognisi_dosen_s1() {
+        // C.4.4.d: Rekognisi/Pengakuan DTPS
+        $count = $this->db->count_all_results('trx_rekognisi_dosen');
+        $total_dosen = $this->db->where('status_ikatan', 'tetap')->count_all_results('master_dosen');
+        
+        $skor = 0;
+        if ($total_dosen > 0) {
+            $rasio = $count / $total_dosen;
+            if ($rasio >= 0.5) $skor = 4.00;
+            else $skor = ($rasio / 0.5) * 4;
+        }
+        
+        $this->_save_skor_sistem('C.4.4.d', 'S1', $skor);
+    }
+
+    private function _calc_prestasi_mhs_s1() {
+        // C.9.4.b: Prestasi Mahasiswa
+        $int = $this->db->where('tingkat', 'internasional')->count_all_results('trx_prestasi_mhs');
+        $nas = $this->db->where('tingkat', 'nasional')->count_all_results('trx_prestasi_mhs');
+        $wil = $this->db->where('tingkat', 'wilayah')->count_all_results('trx_prestasi_mhs');
+        
+        $total_poin = (4 * $int) + (3 * $nas) + (2 * $wil);
+        $skor = 0;
+        if ($total_poin >= 20) $skor = 4.00;
+        else if ($total_poin > 0) $skor = ($total_poin / 20) * 4;
+        
+        $this->_save_skor_sistem('C.9.4.b', 'S1', $skor);
+    }
+
+    private function _calc_bidang_kerja_s1() {
+        // C.9.4.e: Kesesuaian Bidang Kerja
+        // Karena kolom spesifik belum ada, kita gunakan rasio terlacak sebagai proxy minimal
+        $row = $this->db->order_by('tahun_lulus', 'DESC')->limit(1)->get('trx_waktu_tunggu')->row();
+        $skor = 0;
+        if ($row && $row->jml_lulusan > 0) {
+            $pbs = ($row->jml_terlacak / $row->jml_lulusan) * 100; // Asumsi sementara: yang terlacak dianggap sesuai
+            if ($pbs >= 60) $skor = 4.00;
+            else $skor = ($pbs / 60) * 4;
+        }
+        $this->_save_skor_sistem('C.9.4.e', 'S1', $skor);
+    }
+
+    private function _calc_kepuasan_pengguna_s1() {
+        // C.9.4.f: Kepuasan Pengguna Lulusan
+        $this->db->select_avg('persen_sangat_baik', 'sb');
+        $this->db->select_avg('persen_baik', 'b');
+        $row = $this->db->get('trx_kepuasan_pengguna')->row();
+        
+        $skor = 0;
+        if ($row) {
+            // Indeks Kepuasan (Skala 4)
+            $indeks = (($row->sb / 100) * 4) + (($row->b / 100) * 3);
+            if ($indeks >= 3.50) $skor = 4.00;
+            else if ($indeks >= 2.00) $skor = ($indeks - 2) / 1.5 * 3 + 1;
+        }
+        $this->_save_skor_sistem('C.9.4.f', 'S1', $skor);
+    }
+
+    private function _calc_publikasi_mhs_s1() {
+        // C.9.4.g: Publikasi Ilmiah Mahasiswa
+        $count = $this->db->count_all_results('trx_luaran_mhs');
+        $total_mhs = $this->db->where('status', 'lulus')->count_all_results('master_mahasiswa');
+        
+        $skor = 0;
+        if ($total_mhs > 0) {
+            $rasio = $count / $total_mhs;
+            if ($rasio >= 0.1) $skor = 4.00; // 1 publikasi per 10 lulusan = 4.0
+            else $skor = ($rasio / 0.1) * 4;
+        }
+        $this->_save_skor_sistem('C.9.4.g', 'S1', $skor);
     }
 
     /**

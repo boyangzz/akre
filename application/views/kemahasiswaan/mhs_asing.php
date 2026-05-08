@@ -45,20 +45,25 @@
                     <table class="table table-bordered table-sm text-center align-middle mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>Tahun Akademik</th>
+                                <th rowspan="2">Tahun Akademik</th>
+                                <th rowspan="2">Jml Mhs Aktif (dari 2a)</th>
+                                <th colspan="2">Mahasiswa Asing</th>
+                                <th rowspan="2">Total Asing</th>
+                                <th rowspan="2">Aksi</th>
+                            </tr>
+                            <tr>
                                 <th>Full-Time</th>
                                 <th>Part-Time</th>
-                                <th>Total</th>
-                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (empty($records)): ?>
-                                <tr><td colspan="5" class="py-4 text-muted">Belum ada data mahasiswa asing.</td></tr>
+                                <tr><td colspan="6" class="py-4 text-muted">Belum ada data mahasiswa asing.</td></tr>
                             <?php else: ?>
                                 <?php foreach ($records as $r): ?>
                                 <tr>
                                     <td><?= $r->tahun_akademik ?></td>
+                                    <td class="bg-light text-primary fw-bold"><?= number_format($r->total_mhs_aktif) ?></td>
                                     <td><?= $r->jml_fulltime ?></td>
                                     <td><?= $r->jml_parttime ?></td>
                                     <td class="fw-bold"><?= $r->jml_fulltime + $r->jml_parttime ?></td>

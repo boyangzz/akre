@@ -243,6 +243,9 @@
                         <a href="<?= base_url('simulasi/laporan') ?>" class="btn btn-info text-white w-100 mb-2">
                             <i class="bi bi-file-earmark-bar-graph"></i> Lihat Laporan Detail
                         </a>
+                        <a href="<?= base_url('simulasi/metodologi') ?>" class="btn btn-dark w-100 mb-2">
+                            <i class="bi bi-info-circle"></i> Metodologi & Transparansi
+                        </a>
                         <a href="<?= base_url('simulasi/kertas_kerja') ?>" class="btn btn-primary w-100 mb-2">
                             <i class="bi bi-pencil-square"></i> Isi Kertas Kerja Asesor
                         </a>

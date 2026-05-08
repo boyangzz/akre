@@ -70,7 +70,8 @@
                                     <td class="fw-bold"><?= number_format($r->ipk_rata, 2) ?></td>
                                     <td><?= number_format($r->ipk_max, 2) ?></td>
                                     <td>
-                                        <button class="btn btn-sm btn-link p-0" onclick="editData('<?= $r->id ?>', '<?= $r->tahun_lulus ?>', '<?= $r->jml_lulusan ?>', '<?= $r->ipk_min ?>', '<?= $r->ipk_rata ?>', '<?= $r->ipk_max ?>')"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-outline-primary me-1 px-2 py-0" onclick="editData('<?= $r->id ?>', '<?= $r->tahun_lulus ?>', '<?= $r->jml_lulusan ?>', '<?= $r->ipk_min ?>', '<?= $r->ipk_rata ?>', '<?= $r->ipk_max ?>')" title="Edit"><i class="bi bi-pencil small"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger px-2 py-0" onclick="AKRE.Borang.confirmDelete('<?= base_url('luaran/ipk_delete/' . $r->id) ?>', 'Tahun <?= $r->tahun_lulus ?>')" title="Hapus"><i class="bi bi-trash small"></i></button>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

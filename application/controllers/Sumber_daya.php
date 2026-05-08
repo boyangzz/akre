@@ -208,13 +208,38 @@ class Sumber_daya extends MY_Controller
 
     public function sitasi_save()
     {
-        $this->guard_jenjang('3b6');
+        $this->guard_jenjang('3b5');
         $data = $this->input->post(null, true);
         $id = $this->input->post('id');
         $data['prodi_id'] = 1;
         $this->Sumber_daya_model->save('trx_sitasi_dtps', $id, $data);
         $this->session->set_flashdata('success', 'Data sitasi berhasil disimpan.');
         redirect('sumber_daya/sitasi');
+    }
+
+    public function produk_jasa()
+    {
+        $this->guard_jenjang('3b6');
+        $data = [
+            'page_title' => 'Produk/Jasa DTPS yang Diadopsi (3.b.6)',
+            'records'    => $this->db->select('t.*, d.nama as nama_dosen')
+                                     ->from('trx_produk_jasa_dtps t')
+                                     ->join('master_dosen d', 'd.id = t.dosen_id')
+                                     ->get()->result(),
+            'list_dosen' => $this->db->get('master_dosen')->result(),
+        ];
+        $this->render('sumber_daya/produk_jasa_list', $data);
+    }
+
+    public function produk_jasa_save()
+    {
+        $this->guard_jenjang('3b6');
+        $data = $this->input->post(null, true);
+        $id = $this->input->post('id');
+        $data['prodi_id'] = 1;
+        $this->Sumber_daya_model->save('trx_produk_jasa_dtps', $id, $data);
+        $this->session->set_flashdata('success', 'Data produk/jasa berhasil disimpan.');
+        redirect('sumber_daya/produk_jasa');
     }
 
     // ========== Dosen Tetap — redirect ke master_data ==========
@@ -249,8 +274,8 @@ class Sumber_daya extends MY_Controller
         $id   = $this->input->post('id');
         $data['prodi_id'] = 1;
         $this->Sumber_daya_model->save('trx_dosen_bimbingan', $id, $data);
-        $this->session->set_flashdata('success', 'Data bimbingan berhasil disimpan.');
-        redirect('sumber_daya/3a2');
+        $this->session->set_flashdata('success', 'Data bimbingan multi-tahun berhasil disimpan.');
+        redirect('sumber_daya/pembimbing_ta');
     }
 
     // ========== Dosen Tidak Tetap (3.a.4) — status_ikatan: tidak_tetap ==========
@@ -322,8 +347,9 @@ class Sumber_daya extends MY_Controller
             '3b2' => 'penelitian',
             '3b3' => 'pkm',
             '3b4' => 'publikasi',
-            '3b5' => 'hki',
-            '3b6' => 'sitasi',
+            '3b5' => 'sitasi',
+            '3b6' => 'produk_jasa',
+            '3b7' => 'hki',
         ];
 
         if (isset($map[$name])) {

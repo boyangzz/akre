@@ -63,6 +63,11 @@ class Simulasi extends MY_Controller {
         $this->render('simulasi/kamus', $data);
     }
 
+    public function metodologi() {
+        $data['page_title'] = 'Metodologi & Transparansi Skor';
+        $this->render('simulasi/metodologi', $data);
+    }
+
     public function laporan() {
         $data['page_title'] = 'Laporan Hasil Simulasi Akreditasi';
         $data['matriks_available'] = $this->Simulasi_model->check_matriks_availability($this->current_jenjang);

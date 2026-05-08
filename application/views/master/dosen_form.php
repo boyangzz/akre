@@ -45,22 +45,30 @@
                         <option value="industri" <?= ($r && $r->status_ikatan == 'industri') ? 'selected' : '' ?>>Industri/Praktisi</option>
                     </select>
                 </div>
+                <div class="col-md-6" id="wrap-perusahaan">
+                    <label class="form-label">Perusahaan / Industri</label>
+                    <input type="text" class="form-control" name="nama_perusahaan" value="<?= $r ? $r->nama_perusahaan : '' ?>" placeholder="Contoh: PT. Maju Bersama">
+                </div>
+                <div class="col-md-6" id="wrap-sks">
+                    <label class="form-label">Bobot Kredit (SKS)</label>
+                    <input type="number" class="form-control" name="bobot_sks_praktisi" value="<?= $r ? $r->bobot_sks_praktisi : 0 ?>">
+                </div>
                 <div class="col-md-6">
                     <label class="form-label">Bidang Keahlian</label>
                     <input type="text" class="form-control" name="bidang_keahlian" value="<?= $r ? $r->bidang_keahlian : '' ?>">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Sertifikat Kompetensi</label>
-                    <input type="text" class="form-control" name="sertifikat_kompetensi" value="<?= $r ? $r->sertifikat_kompetensi : '' ?>">
+                    <label class="form-label">No. Sertifikat Pendidik Profesional</label>
+                    <input type="text" class="form-control" name="sertifikat_pendidik" value="<?= $r ? $r->sertifikat_pendidik : '' ?>" placeholder="Nomor Sertifikat Pendidik">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">No. Sertifikat Kompetensi/Profesi/Industri</label>
+                    <input type="text" class="form-control" name="sertifikat_kompetensi" value="<?= $r ? $r->sertifikat_kompetensi : '' ?>" placeholder="Nomor Sertifikat Kompetensi">
                 </div>
                 <div class="col-12">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" name="kesesuaian_kompetensi" value="1" <?= ($r && $r->kesesuaian_kompetensi) ? 'checked' : '' ?>>
-                        <label class="form-check-label">Kesesuaian Kompetensi</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="sertifikat_pendidik" value="1" <?= ($r && $r->sertifikat_pendidik) ? 'checked' : '' ?>>
-                        <label class="form-check-label">Sertifikat Pendidik</label>
+                        <label class="form-check-label text-primary fw-bold">Dosen Sesuai dengan Kompetensi Inti PS (Kolom 6)</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" name="status_aktif" value="1" <?= (!$r || $r->status_aktif) ? 'checked' : '' ?>>

@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="<?= base_url('dashboard') ?>">
             <i class="bi bi-mortarboard-fill"></i> AKRE
-            <small>Universitas XYZ</small>
+            <small><?= isset($identitas->nama_pt) ? $identitas->nama_pt : 'Universitas' ?></small>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
             <span class="navbar-toggler-icon"></span>
@@ -31,10 +31,14 @@
                 </li>
 
                 <!-- Identitas -->
-                <li class="nav-item">
-                    <a class="nav-link <?= ($this->uri->segment(1) == 'identitas') ? 'active' : '' ?>" href="<?= base_url('identitas') ?>">
-                        <i class="bi bi-building"></i> Identitas
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle <?= ($this->uri->segment(1) == 'identitas') ? 'active' : '' ?>" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-info-circle"></i> Identitas
                     </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= base_url('identitas') ?>"><i class="bi bi-person-vcard"></i> Identitas Pengusul</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('identitas/prodi_upps') ?>"><i class="bi bi-building"></i> Daftar Prodi UPPS</a></li>
+                    </ul>
                 </li>
 
                 <!-- Data Master -->
@@ -98,6 +102,37 @@
                     </ul>
                 </li>
 
+                <!-- Keuangan & Sarpras -->
+                <li class="nav-item">
+                    <a class="nav-link <?= ($this->uri->segment(1) == 'sarpras') ? 'active' : '' ?>" href="<?= base_url('sarpras') ?>">
+                        <i class="bi bi-cash-stack"></i> Keuangan
+                    </a>
+                </li>
+                
+                <!-- Pendidikan -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-mortarboard"></i> Pendidikan
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= base_url('master_data/matakuliah') ?>"><i class="bi bi-book"></i> 5.a Kurikulum</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('litabmas/integrasi') ?>"><i class="bi bi-shuffle"></i> 5.b Integrasi Penlitian/PkM</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('litabmas/kepuasan') ?>"><i class="bi bi-emoji-smile"></i> 5.c Kepuasan Mahasiswa</a></li>
+                    </ul>
+                </li>
+
+                <!-- Litabmas -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle <?= ($this->uri->segment(1) == 'litabmas') ? 'active' : '' ?>" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-search"></i> Litabmas
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= base_url('litabmas/penelitian') ?>"><i class="bi bi-flask"></i> Penelitian Mhs (6a)</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('litabmas/penelitian_6b') ?>"><i class="bi bi-journal-check"></i> Penelitian Rujukan (6b)</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('litabmas/pkms') ?>"><i class="bi bi-people"></i> PkM Mhs (7)</a></li>
+                    </ul>
+                </li>
+
                 <!-- Luaran -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle <?= ($this->uri->segment(1) == 'luaran') ? 'active' : '' ?>" href="#" data-bs-toggle="dropdown">
@@ -140,7 +175,8 @@
                         <i class="bi bi-person-circle"></i> <?= isset($current_user['nama_lengkap']) ? $current_user['nama_lengkap'] : 'User' ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="<?= base_url('setup/borang') ?>"><i class="bi bi-gear"></i> Pengaturan</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('setup/borang') ?>"><i class="bi bi-gear-wide-connected me-2"></i>Setup Borang</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('setup/qc_audit') ?>"><i class="bi bi-shield-check me-2 text-success"></i>QC Audit Status</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="<?= base_url('auth/logout') ?>"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                     </ul>

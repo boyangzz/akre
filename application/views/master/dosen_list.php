@@ -5,9 +5,14 @@
             <ol class="breadcrumb"><li class="breadcrumb-item"><a href="<?= base_url('dashboard') ?>">Dashboard</a></li><li class="breadcrumb-item active">Dosen</li></ol>
         </nav>
     </div>
-    <a href="<?= base_url('master_data/dosen_form') ?>" class="btn btn-primary btn-sm">
-        <i class="bi bi-plus-lg me-1"></i>Tambah
-    </a>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalImport">
+            <i class="bi bi-file-earmark-spreadsheet me-1"></i>Import CSV
+        </button>
+        <a href="<?= base_url('master_data/dosen_form') ?>" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg me-1"></i>Tambah
+        </a>
+    </div>
 </div>
 
 <div class="card">
@@ -48,6 +53,35 @@
                     <?php endif; ?>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Import -->
+<div class="modal fade" id="modalImport" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="<?= base_url('master_data/dosen_import') ?>" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bulk Import Dosen (CSV)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info small">
+                        <i class="bi bi-info-circle me-1"></i> <strong>Format CSV:</strong><br>
+                        NIDN, Nama, Pendidikan, Jabatan, Status Ikatan<br>
+                        <em>Contoh: 00123, Budi S.Kom, S2, Asisten Ahli, tetap</em>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Pilih File CSV</label>
+                        <input type="file" name="csv_file" class="form-control" accept=".csv" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Unggah & Proses</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

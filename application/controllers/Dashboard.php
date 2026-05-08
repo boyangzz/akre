@@ -14,6 +14,7 @@ class Dashboard extends MY_Controller
         $data = [
             'page_title'  => 'Dashboard',
             'stats'       => $this->Dashboard_model->get_stats(),
+            'identitas'   => $this->Dashboard_model->get_identitas(),
         ];
         $this->render('dashboard/index', $data);
     }
