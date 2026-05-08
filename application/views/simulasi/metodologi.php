@@ -189,52 +189,40 @@
                     <h5 class="m-0 font-weight-bold"><i class="bi bi-shield-lock"></i> Formula Vault: Transparansi Perhitungan Sistem</h5>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted small">Berikut adalah rincian seluruh rumus matematis yang digunakan oleh Scoring Engine AKRE untuk melakukan kalkulasi otomatis.</p>
-                    
+                    <div class="alert alert-info border-info small mb-4">
+                        <i class="bi bi-info-circle-fill me-1"></i>
+                        <strong>Legal Reference:</strong> Seluruh rumus di bawah ini telah diverifikasi sesuai dengan <strong>Lampiran 6d PerBAN-PT No. 5 Tahun 2019</strong> tentang Instrumen Akreditasi Program Studi (IAPS 4.0) untuk Program Diploma Tiga.
+                    </div>
+
                     <div class="accordion" id="accordionFormula">
                         
                         <!-- KRITERIA 2: TATA PAMONG -->
                         <div class="accordion-item border-0 mb-2 shadow-sm">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC2">
-                                    Kriteria 2: Kerjasama Tridharma (C.2.4.a/c)
+                                    Kriteria 2: Kerjasama Tridharma (C.2.4.c)
                                 </button>
                             </h2>
                             <div id="collapseC2" class="accordion-collapse collapse" data-bs-parent="#accordionFormula">
                                 <div class="accordion-body bg-light">
                                     <div class="row">
                                         <div class="col-md-6 border-end">
-                                            <h6 class="font-weight-bold">Logika Poin</h6>
+                                            <h6 class="font-weight-bold">Bobot & Poin (D3)</h6>
+                                            <p class="x-small mb-1">Mengukur kuantitas dan kualitas kerjasama yang relevan dengan bidang keahlian program studi.</p>
                                             <ul class="x-small">
-                                                <li>Internasional = 3 Poin</li>
-                                                <li>Nasional = 2 Poin</li>
-                                                <li>Lokal/Wilayah = 1 Poin</li>
+                                                <li>Internasional (a) = 3 Poin</li>
+                                                <li>Nasional (b) = 2 Poin</li>
+                                                <li>Lokal/Wilayah (c) = 1 Poin</li>
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
-                                            <h6 class="font-weight-bold">Rumus Skor</h6>
-                                            <p class="x-small mb-1"><strong>S1:</strong> <code>Poin >= 10 ? 4 : (Poin/10)*4</code></p>
-                                            <p class="x-small"><strong>D3:</strong> <code>Poin >= 8 ? 4 : (Poin/8)*4</code></p>
+                                            <h6 class="font-weight-bold">Matriks Penilaian D3</h6>
+                                            <p class="x-small mb-1"><code>Poin = (3*a) + (2*b) + c</code></p>
+                                            <div class="bg-white p-2 rounded border x-small">
+                                                <strong>Skor = (Poin / 8) * 4</strong> (Maksimal 4.00)
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- KRITERIA 3: MAHASISWA -->
-                        <div class="accordion-item border-0 mb-2 shadow-sm">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC3">
-                                    Kriteria 3: Mahasiswa (C.3.4.a)
-                                </button>
-                            </h2>
-                            <div id="collapseC3" class="accordion-collapse collapse" data-bs-parent="#accordionFormula">
-                                <div class="accordion-body bg-light">
-                                    <p class="x-small"><strong>Indikator:</strong> Rasio Pendaftar / Lulus Seleksi</p>
-                                    <div class="bg-white p-2 rounded border x-small">
-                                        <code>R >= 5 ? 4 : (R-1) * 0.75 + 1</code>
-                                    </div>
-                                    <p class="x-small text-muted mt-2 mb-0">Berlaku sama untuk S1 dan D3 sesuai standar BAN-PT.</p>
                                 </div>
                             </div>
                         </div>
@@ -243,26 +231,23 @@
                         <div class="accordion-item border-0 mb-2 shadow-sm">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC4">
-                                    Kriteria 4: Sumber Daya Manusia (C.4.4.b/c/d)
+                                    Kriteria 4: Sumber Daya Manusia (C.4.4.a/d)
                                 </button>
                             </h2>
                             <div id="collapseC4" class="accordion-collapse collapse" data-bs-parent="#accordionFormula">
                                 <div class="accordion-body bg-light">
                                     <div class="row small">
-                                        <div class="col-md-4 mb-3 border-end">
-                                            <h6 class="font-weight-bold text-primary">Kualifikasi Doktor (S1)</h6>
-                                            <code>PDS >= 50% ? 4 : 2 + (4*PDS)</code>
-                                            <p class="x-small text-muted mt-2">PDS = Rasio Dosen S3 terhadap Total Dosen Tetap.</p>
+                                        <div class="col-md-6 mb-3 border-end">
+                                            <h6 class="font-weight-bold text-success">Kecukupan Dosen (NDTPS)</h6>
+                                            <p class="x-small">NDTPS adalah jumlah dosen tetap yang bidang keahliannya sesuai dengan kompetensi inti PS.</p>
+                                            <code>Skor = (NDTPS - 3) * (4 / 9)</code>
+                                            <p class="x-small text-muted mt-2">Target minimal untuk skor 4 adalah 12 Dosen Tetap.</p>
                                         </div>
-                                        <div class="col-md-4 mb-3 border-end">
-                                            <h6 class="font-weight-bold text-primary">Jabatan Akademik (S1)</h6>
-                                            <code>PJ >= 70% ? 4 : 2 + (20/7 * PJ)</code>
-                                            <p class="x-small text-muted mt-2">PJ = Rasio Lektor Kepala & Guru Besar.</p>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <h6 class="font-weight-bold text-success">Sertifikat Industri (D3)</h6>
-                                            <code>PS >= 50% ? 4 : (PS/50)*4</code>
-                                            <p class="x-small text-muted mt-2">PS = Rasio Dosen Bersertifikat Kompetensi.</p>
+                                            <p class="x-small">Mengukur persentase dosen yang memiliki sertifikat kompetensi/profesi/industri.</p>
+                                            <code>Skor = (P_Cert / 50%) * 4</code>
+                                            <p class="x-small text-muted mt-2">Target 50% dosen bersertifikat untuk mendapatkan Skor 4.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -273,40 +258,51 @@
                         <div class="accordion-item border-0 mb-2 shadow-sm">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed font-weight-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC9">
-                                    Kriteria 9: Luaran & Capaian (IPK, WT, MS, Kepuasan)
+                                    Kriteria 9: Luaran & Capaian (IPK, WT, MS, PBS)
                                 </button>
                             </h2>
                             <div id="collapseC9" class="accordion-collapse collapse" data-bs-parent="#accordionFormula">
                                 <div class="accordion-body bg-light">
+                                    <p class="x-small mb-3">Kriteria ini memiliki bobot terbesar dalam IAPS 4.0. Berikut perbandingan target <strong>D3 (Diploma Tiga)</strong>:</p>
                                     <div class="table-responsive">
-                                        <table class="table table-sm x-small mb-0">
-                                            <thead>
-                                                <tr><th>Elemen</th><th>Rumus S1 (Akademik)</th><th>Rumus D3 (Vokasi)</th></tr>
+                                        <table class="table table-sm table-bordered x-small mb-0 bg-white">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>Indikator</th>
+                                                    <th>Target Skor 4 (D3)</th>
+                                                    <th>Rumus Perhitungan Skor</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td><strong>IPK Lulusan</strong></td>
-                                                    <td><code>IPK >= 3.25 ? 4 : (IPK-2)/1.25*4</code></td>
-                                                    <td><code>IPK >= 3.00 ? 4 : (IPK-2)*4</code></td>
+                                                    <td>>= 3.00</td>
+                                                    <td><code>Skor = (IPK - 2.00) * 4</code></td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Masa Studi</strong></td>
-                                                    <td><code>MS <= 4.0 ? 4 : (7-MS)/3*4</code></td>
-                                                    <td><code>MS <= 3.0 ? 4 : 4-(MS-3)*4</code></td>
+                                                    <td><strong>Masa Studi (MS)</strong></td>
+                                                    <td><= 3.0 Tahun</td>
+                                                    <td><code>Skor = 4 - (MS - 3) * 4</code> (Max MS = 4 Th)</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Waktu Tunggu</strong></td>
-                                                    <td><code>WT <= 6 ? 4 : (18-WT)/12*4</code></td>
-                                                    <td><code>P_WT >= 80% ? 4 : (P_WT/20)-1</code></td>
+                                                    <td><strong>Waktu Tunggu (WT)</strong></td>
+                                                    <td><= 3 Bulan</td>
+                                                    <td><code>Skor = (P_WT / 20%) - 1</code> (P_WT = % Lulusan WT < 3bln)</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Publikasi/Karya</strong></td>
-                                                    <td><code>R >= 0.1 ? 4 : (R/0.1)*4</code></td>
-                                                    <td><code>R >= 0.05 ? 4 : (R/0.05)*4</code></td>
+                                                    <td><strong>Bidang Kerja (PBS)</strong></td>
+                                                    <td>>= 80%</td>
+                                                    <td><code>Skor = (PBS / 20%) - 1</code> (PBS = % Kesesuaian Tinggi/Sedang)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Kepuasan Pengguna</strong></td>
+                                                    <td>>= 3.50</td>
+                                                    <td><code>IKP = (4*sb + 3*b + 2*c + 1*k) / 100</code></td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
+                                    <p class="x-small text-muted mt-2 mb-0">Note: <em>sb</em> (Sangat Baik), <em>b</em> (Baik), <em>c</em> (Cukup), <em>k</em> (Kurang).</p>
                                 </div>
                             </div>
                         </div>

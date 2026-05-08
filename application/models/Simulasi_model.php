@@ -121,11 +121,10 @@ class Simulasi_model extends CI_Model {
             $this->_calc_ipk_lulusan_d3();
             $this->_calc_masa_studi_d3();
             
-            // NEW: Additional Automated Indicators (D3 Calibration)
-            $this->_calc_kerjasama_d3();
-            $this->_calc_sertifikat_dosen_d3();
             $this->_calc_prestasi_mhs_d3();
             $this->_calc_waktu_tunggu_d3();
+            $this->_calc_bidang_kerja_d3();
+            $this->_calc_jabatan_dosen_d3();
         } else if ($jenjang == 'S1') {
             $this->_calc_kecukupan_dosen_s1();
             $this->_calc_kualifikasi_dosen_s1();
@@ -283,10 +282,40 @@ class Simulasi_model extends CI_Model {
         if ($row && $row->jml_terlacak > 0) {
             $p_wt = ($row->wt_kurang_3bln / $row->jml_terlacak) * 100;
             if ($p_wt >= 80) $skor = 4.00;
-            else if ($p_wt >= 40) $skor = ($p_wt / 20) - 1; // Formula linear sederhana
+            else if ($p_wt >= 40) $skor = ($p_wt / 20) - 1; 
             else $skor = 1.00;
         }
         $this->_save_skor_sistem('C.9.4.d', 'D3', $skor);
+    }
+
+    private function _calc_bidang_kerja_d3() {
+        // C.9.4.e: Kesesuaian Bidang Kerja D3
+        $row = $this->db->order_by('tahun_lulus', 'DESC')->limit(1)->get('trx_kesesuaian_bidang')->row();
+        $skor = 0;
+        if ($row && $row->jml_terlacak > 0) {
+            $pbs = ($row->kesesuaian_tinggi + $row->kesesuaian_sedang) / $row->jml_terlacak * 100;
+            if ($pbs >= 80) $skor = 4.00;
+            else if ($pbs >= 40) $skor = ($pbs / 20) - 1;
+            else $skor = 1.00;
+        }
+        $this->_save_skor_sistem('C.9.4.e', 'D3', $skor);
+    }
+
+    private function _calc_jabatan_dosen_d3() {
+        // C.4.4.c: Jabatan Akademik Dosen D3 (LK/GB)
+        $total_dosen = $this->db->where('status_ikatan', 'tetap')->count_all_results('master_dosen');
+        $lk_gb = $this->db->where('status_ikatan', 'tetap')
+                          ->where_in('jabatan_akademik', ['Lektor Kepala', 'Guru Besar'])
+                          ->count_all_results('master_dosen');
+        
+        $skor = 0;
+        if ($total_dosen > 0) {
+            $pjab = ($lk_gb / $total_dosen) * 100;
+            // Untuk D3 biasanya threshold lebih rendah atau penilaian berbeda, tapi kita gunakan standar LK/GB
+            if ($pjab >= 20) $skor = 4.00;
+            else $skor = ($pjab / 20) * 4;
+        }
+        $this->_save_skor_sistem('C.4.4.c', 'D3', $skor);
     }
 
     /**
@@ -385,9 +414,8 @@ class Simulasi_model extends CI_Model {
         $row = $this->db->order_by('tahun_lulus', 'DESC')->limit(1)->get('trx_waktu_tunggu')->row();
         $skor = 0;
         if ($row && $row->jml_terlacak > 0) {
-            // Asumsi kita hitung rata-rata WT dari kategori
-            // (Kurang 3bln = 1.5, 3-6bln = 4.5, >6bln = 9)
-            $total_wt = ($row->wt_kurang_3bln * 1.5) + ($row->wt_3_sd_6bln * 4.5) + ($row->wt_lebih_6bln * 9);
+            // S1: wt_low (< 6bln), wt_mid (6-18bln), wt_high (> 18bln)
+            $total_wt = ($row->wt_low * 3) + ($row->wt_mid * 12) + ($row->wt_high * 24);
             $avg_wt = $total_wt / $row->jml_terlacak;
             
             if ($avg_wt <= 6) $skor = 4.00;
@@ -441,13 +469,13 @@ class Simulasi_model extends CI_Model {
 
     private function _calc_bidang_kerja_s1() {
         // C.9.4.e: Kesesuaian Bidang Kerja
-        // Karena kolom spesifik belum ada, kita gunakan rasio terlacak sebagai proxy minimal
-        $row = $this->db->order_by('tahun_lulus', 'DESC')->limit(1)->get('trx_waktu_tunggu')->row();
+        $row = $this->db->order_by('tahun_lulus', 'DESC')->limit(1)->get('trx_kesesuaian_bidang')->row();
         $skor = 0;
-        if ($row && $row->jml_lulusan > 0) {
-            $pbs = ($row->jml_terlacak / $row->jml_lulusan) * 100; // Asumsi sementara: yang terlacak dianggap sesuai
-            if ($pbs >= 60) $skor = 4.00;
-            else $skor = ($pbs / 60) * 4;
+        if ($row && $row->jml_terlacak > 0) {
+            $pbs = ($row->kesesuaian_tinggi + $row->kesesuaian_sedang) / $row->jml_terlacak * 100;
+            if ($pbs >= 80) $skor = 4.00;
+            else if ($pbs >= 40) $skor = ($pbs / 20) - 1;
+            else $skor = 1.00;
         }
         $this->_save_skor_sistem('C.9.4.e', 'S1', $skor);
     }
@@ -470,13 +498,18 @@ class Simulasi_model extends CI_Model {
 
     private function _calc_publikasi_mhs_s1() {
         // C.9.4.g: Publikasi Ilmiah Mahasiswa
-        $count = $this->db->count_all_results('trx_luaran_mhs');
+        $this->db->select_sum('jml_ts2', 'ts2');
+        $this->db->select_sum('jml_ts1', 'ts1');
+        $this->db->select_sum('jml_ts0', 'ts0');
+        $totals = $this->db->get('trx_publikasi_mhs_summary')->row();
+        
+        $count = ($totals->ts2 + $totals->ts1 + $totals->ts0);
         $total_mhs = $this->db->where('status', 'lulus')->count_all_results('master_mahasiswa');
         
         $skor = 0;
         if ($total_mhs > 0) {
             $rasio = $count / $total_mhs;
-            if ($rasio >= 0.1) $skor = 4.00; // 1 publikasi per 10 lulusan = 4.0
+            if ($rasio >= 0.1) $skor = 4.00;
             else $skor = ($rasio / 0.1) * 4;
         }
         $this->_save_skor_sistem('C.9.4.g', 'S1', $skor);
